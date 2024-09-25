@@ -16,16 +16,19 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QLabel, QLineEdit, QPushButton,
-    QSizePolicy, QVBoxLayout, QWidget)
-
+    QSizePolicy, QVBoxLayout, QWidget, QDialog)
+from database.getDB import obtain_session
+from database.schema import get_user_by_username, create_user, get_user_by_email
 class SignUp_Widget(object):
     def setupUi(self, Widget):
         if not Widget.objectName():
             Widget.setObjectName(u"Widget")
         Widget.resize(800, 600)
         palette = QPalette()
-        brush = QBrush(QColor(0, 0, 0, 255))
+        brush = QBrush(QColor(255, 255, 255, 255))
         brush.setStyle(Qt.SolidPattern)
+        brush111 = QBrush(QColor(0, 0, 0, 255))
+        brush111.setStyle(Qt.SolidPattern)
         palette.setBrush(QPalette.Active, QPalette.WindowText, brush)
         brush1 = QBrush(QColor(170, 255, 255, 255))
         brush1.setStyle(Qt.SolidPattern)
@@ -42,7 +45,7 @@ class SignUp_Widget(object):
         brush5 = QBrush(QColor(113, 170, 170, 255))
         brush5.setStyle(Qt.SolidPattern)
         palette.setBrush(QPalette.Active, QPalette.Mid, brush5)
-        palette.setBrush(QPalette.Active, QPalette.Text, brush)
+        palette.setBrush(QPalette.Active, QPalette.Text, brush111)
         palette.setBrush(QPalette.Active, QPalette.BrightText, brush2)
         palette.setBrush(QPalette.Active, QPalette.ButtonText, brush)
         palette.setBrush(QPalette.Active, QPalette.Base, brush2)
@@ -138,9 +141,10 @@ class SignUp_Widget(object):
 
         self.signUpButton = QPushButton(self.verticalLayoutWidget)
         self.signUpButton.setObjectName(u"signUpButton")
+        self.signUpButton.clicked.connect(lambda:self.sign_up(self.emailLineEdit.text(), self.usernameLineEdit.text(), self.passwordLineEdit.text(), self.confPasswordLineEdit.text()))
         palette1 = QPalette()
         palette1.setBrush(QPalette.Active, QPalette.WindowText, brush)
-        brush10 = QBrush(QColor(0, 255, 255, 255))
+        brush10 = QBrush(QColor(0, 255, 255, 0))
         brush10.setStyle(Qt.SolidPattern)
         palette1.setBrush(QPalette.Active, QPalette.Button, brush10)
         brush11 = QBrush(QColor(127, 255, 255, 255))
@@ -229,4 +233,10 @@ class SignUp_Widget(object):
         self.outputLabel.setText(QCoreApplication.translate("Widget", u"TextLabel", None))
         self.signUpButton.setText(QCoreApplication.translate("Widget", u"Sign Up", None))
     # retranslateUi
-
+    def sign_up(self, email, username, password, confPassword):
+        if password == confPassword:
+                with obtain_session() as session:
+                        existing = create_user(username, password, email, session)
+                        print(existing[1])
+        else:
+             print("Passwords Do not match")

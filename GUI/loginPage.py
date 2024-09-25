@@ -25,8 +25,10 @@ class Login_Widget(object):
             Widget.setObjectName(u"Widget")
         Widget.resize(800, 600)
         palette = QPalette()
-        brush = QBrush(QColor(0, 0, 0, 255))
+        brush = QBrush(QColor(255, 255, 255, 255))
         brush.setStyle(Qt.SolidPattern)
+        brush111 = QBrush(QColor(0, 0, 0, 255))
+        brush111.setStyle(Qt.SolidPattern)
         palette.setBrush(QPalette.Active, QPalette.WindowText, brush)
         brush1 = QBrush(QColor(0, 170, 255, 255))
         brush1.setStyle(Qt.SolidPattern)
@@ -43,7 +45,7 @@ class Login_Widget(object):
         brush5 = QBrush(QColor(113, 170, 170, 255))
         brush5.setStyle(Qt.SolidPattern)
         palette.setBrush(QPalette.Active, QPalette.Mid, brush5)
-        palette.setBrush(QPalette.Active, QPalette.Text, brush)
+        palette.setBrush(QPalette.Active, QPalette.Text, brush111)
         brush6 = QBrush(QColor(255, 255, 255, 255))
         brush6.setStyle(Qt.SolidPattern)
         palette.setBrush(QPalette.Active, QPalette.BrightText, brush6)
@@ -57,7 +59,7 @@ class Login_Widget(object):
         brush8 = QBrush(QColor(255, 255, 220, 255))
         brush8.setStyle(Qt.SolidPattern)
         palette.setBrush(QPalette.Active, QPalette.ToolTipBase, brush8)
-        palette.setBrush(QPalette.Active, QPalette.ToolTipText, brush)
+        palette.setBrush(QPalette.Active, QPalette.ToolTipText, brush111)
         brush9 = QBrush(QColor(0, 0, 0, 127))
         brush9.setStyle(Qt.SolidPattern)
 #if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
@@ -243,7 +245,7 @@ class Login_Widget(object):
         self.newSignUpButton.setText(QCoreApplication.translate("Widget", u"New User? Sign Up", None))
         self.loginPushButton.setText(QCoreApplication.translate("Widget", u"Login", None))
         self.showPassCheckBox.setText(QCoreApplication.translate("Widget", u"Show Password", None))
-        self.outputLabel.setText(QCoreApplication.translate("Widget", u"TextLabel", None))
+        self.outputLabel.setText(QCoreApplication.translate("Widget", u"", None))
     # retranslateUi
 
     def callLogin(self, username, password, loginLabel: QLabel):
@@ -270,4 +272,5 @@ class Login_Widget(object):
             password_field.setEchoMode(QLineEdit.EchoMode.Password)
             # icon.addFile(u"D:\Code\Password Manager\GUI\icons\eye_open.png")
             check_box.setIcon(icon)
-
+    
+    # def openSignUp(self, )

@@ -2,21 +2,24 @@ from database.models import User, Base, PasswordEntry
 from sqlalchemy import and_
 from sqlalchemy.orm import Session
 from database import get_session
-from passwordHashing.crypto import encrypt_text
+from passwordHashing.crypto import encrypt_text, load_key
 from passwordHashing.hashmypassword import hash_password, generate_salt
 
-def create_user(Username, password, session):
+def create_user(Username, password, email, session):
     existing_user = get_user_by_username(session, Username)
-    if existing_user:
+    existing_email = get_user_by_email(session, email)
+    if existing_user or existing_email:
         print(f"User {Username} already exists")
         return existing_user, -1
 
     # salty = generate_salt()
     hashed_password, salty = hash_password(password)
-    new_user = User(username=Username, password_hash=hashed_password, salt=salty)
+    new_user = User(username=Username, password_hash=hashed_password, salt=salty, email=email)
     session.add(new_user)
     session.flush()  # Flush to ensure ID is assigned
     print(f"User ID after flush: {new_user.id}")  
+    load_key(new_user.id)
+
     session.commit()
     return new_user, 1
 
@@ -34,6 +37,7 @@ def get_user_info(username, session):
 
         user_info = {
             'username': user.username,
+            'email': user.email,
             'password_hash': user.password_hash,
             'user.id' :user.id,
             'salt' :user.salt,
@@ -70,4 +74,7 @@ def create_password_entry(user_id: int, website: str, username: str, password: s
 
 def get_user_by_username(session, username):
      return session.query(User).filter(User.username == username).first()
+
+def get_user_by_email(session, Email):
+     return session.query(User).filter(User.email == Email).first()
 
